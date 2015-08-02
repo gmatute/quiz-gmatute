@@ -76,7 +76,31 @@ exports.create = function(req, res) {
     })
 };
 
+// modulo 8 Editar preguntas
+exports.edit = function(req, res) {
+  var quiz = req.quiz; // autoload de instancia de quiz
+  res.render('quizes/edit', {quiz: quiz, errors: []});
+}
+// modulo 8 Actualizar pregunta DB
 
+exports.update = function(req, res) {
+  req.quiz.pregunta = req.body.quiz.pregunta;
+  req.quiz.respuesta = req.body.quiz.respuesta;
+  req.quiz
+    .validate()
+    .then(function(err) {
+      if(err) {
+        res.render('quizes/edit', {quiz: req.quiz, errors: err.errors});
+      } else {
+        req.quiz // save: guarda en DB campos pregunta y respuesta de quiz
+        .save( { fields: ['pregunta', 'respuesta'] })
+        .then(function() {
+          res.redirect('/quizes'); // Redirecciona HTTP (URL relativo) a Lista de preguntas
+        });
+      }
+    }
+  );
+};
 
 exports.author = function(req,res) {
   res.render('author',{errors: []});

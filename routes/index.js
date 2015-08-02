@@ -19,6 +19,10 @@ router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
 // modulo 8 Crear preguntas
 router.get('/quizes/new', quizController.new);
 router.post('/quizes/create', quizController.create);
+// modulo 8 Editar preguntas
+router.get('/quizes/:quizId(\\d+)/edit', quizController.edit);
+router.put('/quizes/:quizId(\\d+)', quizController.update);
+
 router.get('/author', quizController.author);
 
 module.exports = router;
