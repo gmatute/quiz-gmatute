@@ -15,6 +15,11 @@ router.get('/', function(req, res) {
 router.get('/quizes',                      quizController.index);
 router.get('/quizes/:quizId(\\d+)',        quizController.show);
 router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
+// modulo 8 Crear preguntas
+router.get('/quizes/new', quizController.new);
+router.post('/quizes/create', quizController.create);
+
+
 router.get('/author', quizController.author);
 
 module.exports = router;

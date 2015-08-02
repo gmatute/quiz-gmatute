@@ -46,6 +46,36 @@ exports.answer = function(req,res) {
 //    res.render('quizes/answer', {respuesta: 'Incorrecto'});
 //  };
 //};
+
+// modulo 8 crear preguntas
+
+exports.new = function(req, res) {
+  var quiz= models.Quiz.build({ // crea un objeto quiz, campos igual que nuestra tabla
+        pregunta:"Pregunta", respuesta:"Respuesta"
+      });
+   res.render('quizes/new', {quiz: quiz});
+};
+exports.create = function(req, res) {
+  var quiz = models.Quiz.build(req.body.quiz);
+    // save: guarda en DB campos pregunta y respuesta de quiz
+  quiz
+  .validate().then(
+    function(err){
+      if (err){
+        res.render('quizes/new', {quiz: quiz, errors: err.errors});
+      } else {
+        quiz //save: guarda en DB campos pregunta y respuesta de quiz
+        .save({fields: ["pregunta", "respuesta"]})
+        .then(function(){
+          // Redirecciona HTTP (URL relativo) a Lista de preguntas
+          res.redirect('/quizes');
+        });
+      }
+    })
+};
+
+
+
 exports.author = function(req,res) {
   res.render('author');
 };
