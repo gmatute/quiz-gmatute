@@ -1,7 +1,4 @@
 var models= require('../models/models.js');
-
-
-
 // Autoload - factoriza el código si ruta incluye :quizId
 exports.load = function(req, res, next, quizId) {
   models.Quiz.findById(quizId).then(
@@ -9,16 +6,15 @@ exports.load = function(req, res, next, quizId) {
      if (quiz) {
         req.quiz = quiz;
         next();
-      } else { next(new Error('No existe quizId=' + quizId)); }
+      } else { next(new Error('No existe quizId=' + quizId + ' por favor, revisa el código de pregunta')); }
     }
   ).catch(function(error) { next(error);});
 };
 
-
 exports.index = function(req, res) {
   models.Quiz.findAll().then(
      function(quizes) {
-      res.render('quizes/index', { quizes: quizes});
+      res.render('quizes/index.ejs', { quizes: quizes});
      }
    ).catch(function(error) { next(error);})
 };
