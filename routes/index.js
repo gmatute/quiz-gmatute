@@ -8,7 +8,8 @@ router.param('quizId', quizController.load);  // autoload :quizId
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Quiz' });
+  //res.render('index', { title: 'Quiz' });
+    res.render('index', { title: 'Quiz', errors: [] });
 });
 
 // Definición de rutas de /quizes
@@ -18,8 +19,6 @@ router.get('/quizes/:quizId(\\d+)/answer', quizController.answer);
 // modulo 8 Crear preguntas
 router.get('/quizes/new', quizController.new);
 router.post('/quizes/create', quizController.create);
-
-
 router.get('/author', quizController.author);
 
 module.exports = router;

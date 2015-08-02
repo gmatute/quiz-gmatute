@@ -20,14 +20,16 @@ exports.index = function(req, res) {
     where = {where: ["pregunta like ?", '%' + buscar.replace(' ', '%') + '%'], order: 'pregunta'};
   }
   models.Quiz.findAll(where).then(function(quizes) {
-    res.render('quizes/index.ejs', {quizes: quizes, query: buscar});
+    //res.render('quizes/index.ejs', {quizes: quizes, query: buscar});
+    res.render('quizes/index', { quizes: quizes, errors: [] });
   }
   ).catch(function(error) { next(error);} );
 };
 
 // GET /quizes/:id
 exports.show = function(req, res) {
-  res.render('quizes/show', { quiz: req.quiz});
+  //res.render('quizes/show', { quiz: req.quiz});
+  res.render('quizes/show', { quiz: req.quiz, errors: [] });
 };
 
 // GET /quizes/answer
@@ -36,7 +38,8 @@ exports.answer = function(req,res) {
   if(req.query.respuesta.toLowerCase() === req.quiz.respuesta.toLowerCase()) {
     resultado = 'Correcto';
   }
-  res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado});
+//  res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado});
+    res.render('quizes/answer', {quiz: req.quiz,respuesta: resultado,errors: []});
 };
 
   //if (req.query.respuesta === 'Roma')
@@ -53,23 +56,22 @@ exports.new = function(req, res) {
   var quiz= models.Quiz.build({ // crea un objeto quiz, campos igual que nuestra tabla
         pregunta:"Pregunta", respuesta:"Respuesta"
       });
-   res.render('quizes/new', {quiz: quiz});
+      res.render('quizes/new', {quiz: quiz, errors: []});
+   //res.render('quizes/new', {quiz: quiz});
+
 };
 exports.create = function(req, res) {
   var quiz = models.Quiz.build(req.body.quiz);
     // save: guarda en DB campos pregunta y respuesta de quiz
-  quiz
-  .validate().then(
+  quiz .validate().then(
     function(err){
       if (err){
         res.render('quizes/new', {quiz: quiz, errors: err.errors});
       } else {
         quiz //save: guarda en DB campos pregunta y respuesta de quiz
         .save({fields: ["pregunta", "respuesta"]})
-        .then(function(){
-          // Redirecciona HTTP (URL relativo) a Lista de preguntas
-          res.redirect('/quizes');
-        });
+        .then(function(){res.redirect('/quizes');
+         });
       }
     })
 };
@@ -77,5 +79,5 @@ exports.create = function(req, res) {
 
 
 exports.author = function(req,res) {
-  res.render('author');
+  res.render('author',{errors: []});
 };
