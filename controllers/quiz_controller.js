@@ -6,7 +6,8 @@ exports.load = function(req, res, next, quizId) {
      if (quiz) {
         req.quiz = quiz;
         next();
-      } else { next(new Error('No existe quizId=' + quizId + ' por favor, revisa el código de pregunta')); }
+      } else {
+        next(new Error('No existe quizId=' + quizId + ' por favor, revisa el código de pregunta')); }
     }
   ).catch(function(error) { next(error);});
 };
@@ -32,7 +33,7 @@ exports.show = function(req, res) {
 // GET /quizes/answer
 exports.answer = function(req,res) {
   var resultado = 'Incorrecto';
-  if (req.query.respuesta === req.quiz.respuesta) {
+  if(req.query.respuesta.toLowerCase() === req.quiz.respuesta.toLowerCase()) {
     resultado = 'Correcto';
   }
   res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado});
