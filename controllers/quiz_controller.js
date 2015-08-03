@@ -23,7 +23,8 @@ exports.index = function(req, res) {
     //res.render('quizes/index.ejs', {quizes: quizes, query: buscar});
     res.render('quizes/index', { quizes: quizes, errors: [] });
   }
-  ).catch(function(error) { next(error);} );
+).catch(function(error) { //next(error);
+} );
 };
 
 // GET /quizes/:id
@@ -54,7 +55,8 @@ exports.answer = function(req,res) {
 
 exports.new = function(req, res) {
   var quiz= models.Quiz.build({ // crea un objeto quiz, campos igual que nuestra tabla
-        pregunta:"Pregunta", respuesta:"Respuesta"
+      //  pregunta:"Pregunta", respuesta:"Respuesta"
+      pregunta:"Pregunta", respuesta:"Respuesta", tema: "Tema" // P2P -Mod 8
       });
       res.render('quizes/new', {quiz: quiz, errors: []});
    //res.render('quizes/new', {quiz: quiz});
@@ -69,7 +71,8 @@ exports.create = function(req, res) {
         res.render('quizes/new', {quiz: quiz, errors: err.errors});
       } else {
         quiz //save: guarda en DB campos pregunta y respuesta de quiz
-        .save({fields: ["pregunta", "respuesta"]})
+        //.save({fields: ["pregunta", "respuesta"]})
+        .save({fields: ["pregunta", "respuesta", "tema"]}) // P2P Mod 8
         .then(function(){res.redirect('/quizes');
          });
       }
@@ -86,6 +89,7 @@ exports.edit = function(req, res) {
 exports.update = function(req, res) {
   req.quiz.pregunta = req.body.quiz.pregunta;
   req.quiz.respuesta = req.body.quiz.respuesta;
+  req.quiz.tema = req.body.quiz.tema; // P2P Mod 8
   req.quiz
     .validate()
     .then(function(err) {
@@ -93,7 +97,8 @@ exports.update = function(req, res) {
         res.render('quizes/edit', {quiz: req.quiz, errors: err.errors});
       } else {
         req.quiz // save: guarda en DB campos pregunta y respuesta de quiz
-        .save( { fields: ['pregunta', 'respuesta'] })
+        //.save( { fields: ['pregunta', 'respuesta'] })
+        .save( { fields: ['pregunta', 'respuesta', 'tema'] }) //  P2P Mod 8
         .then(function() {
           res.redirect('/quizes'); // Redirecciona HTTP (URL relativo) a Lista de preguntas
         });
