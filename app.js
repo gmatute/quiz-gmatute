@@ -48,6 +48,29 @@ app.use(function(req, res, next) {
   next();
 });
 
+// Autologout
+app.use(function(req, res, next) {
+    // Comprobamos si hay usuario logado
+    if (req.session.user) {
+        var dateNow = new Date();
+        var timeNow = dateNow.getTime();
+
+        var lastAccessDiffMinutes = (timeNow - req.session.ultimoAcceso) * 1.6667 * Math.pow(10, -5);
+        if (lastAccessDiffMinutes > 2) {
+
+            delete req.session.user;
+            delete req.session.ultimoAcceso;
+            req.session.errors = [{"message": 'Su sesión ha estado desiado tiempo inactiva y ha finalizado. Por favor, vuelva a identificarse.'}];
+            //req.session.errors = [{"message": 'Se ha producido un error: '+error}];
+            res.redirect("/login");
+        } else {
+            req.session.ultimoAcceso = timeNow;
+        }
+    }
+    next();
+});
+
+
 // Instalar enrutadores y asociar rutas a sus gestores
 app.use('/', routes);     // Ruta base, Home
 
